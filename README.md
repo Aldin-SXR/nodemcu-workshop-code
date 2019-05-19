@@ -4,6 +4,8 @@ In this repository, you will find all code discussed and displayed during the No
 
 The `src` folder contains the NodeMCU (C++) code, whereas the `public` folder contains the client-side web page (HTML + JavaScript).
 
+You can test this code out by downloading it, and importing it via PlatformIO. (`PIO Home` => `Import Arduino Project`).
+
 Please note that the actual configuration files (`config.js` and `config.h`) have not been provided directly. Instead, rename the `config.sample` files (remove the `sample` extension), and supply your own data, if you want to test out the project.
 
 ```cpp
