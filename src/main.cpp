@@ -45,7 +45,19 @@ void setup() {
     /* Establish connection */
     WiFi.mode(WIFI_STA);
     WiFi.begin(wifi_ssid, wifi_password);
-    WiFi.setAutoReconnect(true);
+    
+    /* SmartConfig code */
+    
+    // WiFi.setAutoReconnect(true);
+    // WiFi.beginSmartConfig();
+    // Serial.print("[SmartConfig] Waiting for credentials...");
+    // while (!WiFi.smartConfigDone()) {
+    //     delay(500);
+    //     Serial.print(".");
+    // }
+    // Serial.println("");
+    // Serial.println("[SmartConfig] SmartConfig done.");
+    
     Serial.print("[WiFi] Connecting...");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -59,6 +71,9 @@ void setup() {
         mqttClient.setCleanSession(true);
         mqttClient.setServer(mqttServer, port);
         mqttClient.setCredentials(mqtt_user, mqtt_password);
+        /* Set the Last Will & Testament (LWT) */
+        mqttClient.setWill("/lwt", 0, true, "NodeMCU has disconnected.");
+        mqttClient.setKeepAlive(10);
         Serial.println("[MQTT] Connecting...");
         mqttClient.connect();
     }
@@ -135,6 +150,9 @@ void onMqttConnect(bool sessionPresent) {
     /* Subscribe to topics */
     mqttClient.subscribe("/flip", 0);
     mqttClient.subscribe("/rgb", 0);
+    /* Reset the retained messages */
+    mqttClient.publish("/led", 0, true);
+    mqttClient.publish("/lwt", 0, true, NULL);
 }
 
 /* MQTT message callback */
